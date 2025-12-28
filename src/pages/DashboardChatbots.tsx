@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import ChatbotQAPairs from "@/components/dashboard/ChatbotQAPairs";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Bot, Plus, Trash2, Copy, Code, Loader2 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Bot, Plus, Trash2, Copy, Code, Loader2, Settings, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 
 interface Chatbot {
@@ -310,7 +312,7 @@ const DashboardChatbots = () => {
                           Get Embed Code
                         </Button>
                       </DialogTrigger>
-                      <DialogContent>
+                      <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle>Embed Code</DialogTitle>
                           <DialogDescription>
@@ -318,8 +320,8 @@ const DashboardChatbots = () => {
                           </DialogDescription>
                         </DialogHeader>
                         <div className="relative">
-                          <pre className="p-4 bg-muted rounded-lg text-sm overflow-x-auto">
-                            <code>{getEmbedCode()}</code>
+                          <pre className="p-4 bg-muted rounded-lg text-sm overflow-x-auto whitespace-pre-wrap break-all">
+                            <code className="block">{getEmbedCode()}</code>
                           </pre>
                           <Button
                             size="icon"
@@ -334,114 +336,133 @@ const DashboardChatbots = () => {
                     </Dialog>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label htmlFor="bot-name">Name</Label>
-                      <Input
-                        id="bot-name"
-                        value={selectedBot.name}
-                        onChange={(e) =>
-                          setSelectedBot({ ...selectedBot, name: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="bot-description">Description</Label>
-                      <Input
-                        id="bot-description"
-                        value={selectedBot.description || ""}
-                        onChange={(e) =>
-                          setSelectedBot({ ...selectedBot, description: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
+                <CardContent>
+                  <Tabs defaultValue="settings">
+                    <TabsList className="mb-4">
+                      <TabsTrigger value="settings" className="gap-2">
+                        <Settings className="h-4 w-4" />
+                        Settings
+                      </TabsTrigger>
+                      <TabsTrigger value="qa" className="gap-2">
+                        <MessageSquare className="h-4 w-4" />
+                        Custom Q&A
+                      </TabsTrigger>
+                    </TabsList>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="system-prompt">System Prompt</Label>
-                    <Textarea
-                      id="system-prompt"
-                      rows={5}
-                      placeholder="You are a helpful AI assistant..."
-                      value={selectedBot.system_prompt}
-                      onChange={(e) =>
-                        setSelectedBot({ ...selectedBot, system_prompt: e.target.value })
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      This defines your chatbot's personality and behavior
-                    </p>
-                  </div>
+                    <TabsContent value="settings" className="space-y-6">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="bot-name">Name</Label>
+                          <Input
+                            id="bot-name"
+                            value={selectedBot.name}
+                            onChange={(e) =>
+                              setSelectedBot({ ...selectedBot, name: e.target.value })
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="bot-description">Description</Label>
+                          <Input
+                            id="bot-description"
+                            value={selectedBot.description || ""}
+                            onChange={(e) =>
+                              setSelectedBot({ ...selectedBot, description: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="welcome-message">Welcome Message</Label>
-                    <Input
-                      id="welcome-message"
-                      placeholder="Hello! How can I help you today?"
-                      value={selectedBot.welcome_message || ""}
-                      onChange={(e) =>
-                        setSelectedBot({ ...selectedBot, welcome_message: e.target.value })
-                      }
-                    />
-                  </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="system-prompt">System Prompt</Label>
+                        <Textarea
+                          id="system-prompt"
+                          rows={5}
+                          placeholder="You are a helpful AI assistant..."
+                          value={selectedBot.system_prompt}
+                          onChange={(e) =>
+                            setSelectedBot({ ...selectedBot, system_prompt: e.target.value })
+                          }
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          This defines your chatbot's personality and behavior
+                        </p>
+                      </div>
 
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="space-y-2">
-                      <Label>Theme</Label>
-                      <Select
-                        value={selectedBot.theme}
-                        onValueChange={(value) =>
-                          setSelectedBot({ ...selectedBot, theme: value })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="dark">Dark</SelectItem>
-                          <SelectItem value="light">Light</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Position</Label>
-                      <Select
-                        value={selectedBot.position}
-                        onValueChange={(value) =>
-                          setSelectedBot({ ...selectedBot, position: value })
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="bottom-right">Bottom Right</SelectItem>
-                          <SelectItem value="bottom-left">Bottom Left</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="welcome-message">Welcome Message</Label>
+                        <Input
+                          id="welcome-message"
+                          placeholder="Hello! How can I help you today?"
+                          value={selectedBot.welcome_message || ""}
+                          onChange={(e) =>
+                            setSelectedBot({ ...selectedBot, welcome_message: e.target.value })
+                          }
+                        />
+                      </div>
 
-                  <div className="flex items-center justify-between">
-                    <div className="space-y-0.5">
-                      <Label>Active</Label>
-                      <p className="text-xs text-muted-foreground">
-                        Enable or disable this chatbot
-                      </p>
-                    </div>
-                    <Switch
-                      checked={selectedBot.is_active}
-                      onCheckedChange={(checked) =>
-                        setSelectedBot({ ...selectedBot, is_active: checked })
-                      }
-                    />
-                  </div>
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label>Theme</Label>
+                          <Select
+                            value={selectedBot.theme}
+                            onValueChange={(value) =>
+                              setSelectedBot({ ...selectedBot, theme: value })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="dark">Dark</SelectItem>
+                              <SelectItem value="light">Light</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Position</Label>
+                          <Select
+                            value={selectedBot.position}
+                            onValueChange={(value) =>
+                              setSelectedBot({ ...selectedBot, position: value })
+                            }
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="bottom-right">Bottom Right</SelectItem>
+                              <SelectItem value="bottom-left">Bottom Left</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
 
-                  <Button onClick={updateChatbot} disabled={saving} className="w-full">
-                    {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                    Save Changes
-                  </Button>
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label>Active</Label>
+                          <p className="text-xs text-muted-foreground">
+                            Enable or disable this chatbot
+                          </p>
+                        </div>
+                        <Switch
+                          checked={selectedBot.is_active}
+                          onCheckedChange={(checked) =>
+                            setSelectedBot({ ...selectedBot, is_active: checked })
+                          }
+                        />
+                      </div>
+
+                      <Button onClick={updateChatbot} disabled={saving} className="w-full">
+                        {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                        Save Changes
+                      </Button>
+                    </TabsContent>
+
+                    <TabsContent value="qa">
+                      <ChatbotQAPairs chatbotId={selectedBot.id} />
+                    </TabsContent>
+                  </Tabs>
                 </CardContent>
               </Card>
             ) : (
