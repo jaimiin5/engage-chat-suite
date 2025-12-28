@@ -39,8 +39,8 @@ const Navbar = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost">Sign In</Button>
-            <Button variant="hero">Get Started Free</Button>
+            <Button variant="ghost" asChild><Link to="/auth">Sign In</Link></Button>
+            <Button variant="hero" asChild><Link to="/auth">Get Started Free</Link></Button>
           </div>
 
           {/* Mobile Menu Button */}
