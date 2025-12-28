@@ -194,12 +194,21 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
       }
     } catch (error) {
       console.error("Chat error:", error);
+      // Friendly fallback message when AI is unavailable
+      const fallbackMessages = [
+        "Hey, glad to hear from you! 😊 I'll get back to you on this.",
+        "Thanks for reaching out! Our team will look into this for you.",
+        "Great question! I'll make sure someone gets back to you soon.",
+        "Thanks for your message! We'll follow up with you shortly.",
+      ];
+      const fallbackResponse = fallbackMessages[Math.floor(Math.random() * fallbackMessages.length)];
+      
       setMessages((prev) => [
         ...prev.filter((m) => m.id !== assistantId),
         {
           id: assistantId,
           role: "assistant",
-          content: "Sorry, I encountered an error. Please try again.",
+          content: fallbackResponse,
         },
       ]);
     } finally {
