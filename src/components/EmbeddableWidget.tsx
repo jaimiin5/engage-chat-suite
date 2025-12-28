@@ -190,7 +190,7 @@ const EmbeddableWidget = ({
       {isOpen && (
         <div
           className={cn(
-            "mb-4 w-[360px] max-h-[500px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-bottom-4 duration-300",
+            "mb-4 w-[360px] max-h-[500px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden animate-fade-in",
             currentTheme.container
           )}
         >
