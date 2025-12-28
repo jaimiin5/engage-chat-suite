@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +29,9 @@ const Navbar = () => {
             <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
               How it Works
             </a>
+            <Link to="/widget-demo" className="text-muted-foreground hover:text-foreground transition-colors">
+              Demo
+            </Link>
             <a href="#docs" className="text-muted-foreground hover:text-foreground transition-colors">
               Docs
             </a>
@@ -61,6 +65,9 @@ const Navbar = () => {
               <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors py-2">
                 How it Works
               </a>
+              <Link to="/widget-demo" className="text-muted-foreground hover:text-foreground transition-colors py-2">
+                Demo
+              </Link>
               <a href="#docs" className="text-muted-foreground hover:text-foreground transition-colors py-2">
                 Docs
               </a>
