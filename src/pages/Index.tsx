@@ -1,4 +1,4 @@
-import { HelmetProvider, Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <HelmetProvider>
+    <>
       <Helmet>
         <title>ChatFlow - AI Chatbot Platform for Businesses | Build Smarter Chatbots</title>
         <meta 
@@ -32,7 +32,7 @@ const Index = () => {
         </main>
         <Footer />
       </div>
-    </HelmetProvider>
+    </>
   );
 };
 
