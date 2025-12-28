@@ -11,16 +11,11 @@ const WidgetDemo = () => {
   const [position, setPosition] = useState<"bottom-right" | "bottom-left">("bottom-right");
 
   const embedCode = `<!-- ChatFlow Widget -->
-<script>
-  window.ChatFlowConfig = {
-    botId: "YOUR_BOT_ID",
-    theme: "${theme}",
-    position: "${position}"
-  };
-</script>
-<script 
-  src="https://cdn.chatflow.ai/widget.js" 
-  async>
+<script
+  src="https://YOUR_DOMAIN/widget.js"
+  data-bot-id="YOUR_BOT_ID"
+  data-theme="${theme}"
+  data-position="${position}">
 </script>`;
 
   const handleCopy = () => {
@@ -128,7 +123,7 @@ const WidgetDemo = () => {
                 </Button>
               </div>
               <pre className="p-4 rounded-lg bg-secondary overflow-x-auto text-sm">
-                <code className="text-muted-foreground">{embedCode}</code>
+                <code className="text-muted-foreground whitespace-pre-wrap break-all">{embedCode}</code>
               </pre>
             </div>
 
@@ -142,14 +137,18 @@ const WidgetDemo = () => {
                 </li>
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 text-sm text-primary font-medium">2</span>
-                  <span>Replace <code className="px-1.5 py-0.5 bg-secondary rounded text-sm">YOUR_BOT_ID</code> with your chatbot's ID</span>
+                  <span>Replace <code className="px-1.5 py-0.5 bg-secondary rounded text-sm">YOUR_DOMAIN</code> with your published app URL</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 text-sm text-primary font-medium">3</span>
-                  <span>Paste it before the closing <code className="px-1.5 py-0.5 bg-secondary rounded text-sm">&lt;/body&gt;</code> tag of your website</span>
+                  <span>Replace <code className="px-1.5 py-0.5 bg-secondary rounded text-sm">YOUR_BOT_ID</code> with your chatbot's ID from the dashboard</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 text-sm text-primary font-medium">4</span>
+                  <span>Paste it before the closing <code className="px-1.5 py-0.5 bg-secondary rounded text-sm">&lt;/body&gt;</code> tag of your website</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 text-sm text-primary font-medium">5</span>
                   <span>That's it! Your chatbot is now live.</span>
                 </li>
               </ol>
