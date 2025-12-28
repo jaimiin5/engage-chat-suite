@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      chatbot_qa_pairs: {
+        Row: {
+          answer: string
+          chatbot_id: string
+          created_at: string
+          id: string
+          is_active: boolean
+          match_type: string
+          priority: number
+          question: string
+          updated_at: string
+        }
+        Insert: {
+          answer: string
+          chatbot_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          match_type?: string
+          priority?: number
+          question: string
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          chatbot_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          match_type?: string
+          priority?: number
+          question?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_qa_pairs_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: false
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chatbots: {
         Row: {
           created_at: string
