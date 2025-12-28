@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ChatbotQAPairs from "@/components/dashboard/ChatbotQAPairs";
+import ChatbotTest from "@/components/dashboard/ChatbotTest";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bot, Plus, Trash2, Copy, Code, Loader2, Settings, MessageSquare } from "lucide-react";
+import { Bot, Plus, Trash2, Copy, Code, Loader2, Settings, MessageSquare, Play } from "lucide-react";
 import { toast } from "sonner";
 
 interface Chatbot {
@@ -347,6 +348,10 @@ const DashboardChatbots = () => {
                         <MessageSquare className="h-4 w-4" />
                         Custom Q&A
                       </TabsTrigger>
+                      <TabsTrigger value="test" className="gap-2">
+                        <Play className="h-4 w-4" />
+                        Test Chatbot
+                      </TabsTrigger>
                     </TabsList>
 
                     <TabsContent value="settings" className="space-y-6">
@@ -461,6 +466,15 @@ const DashboardChatbots = () => {
 
                     <TabsContent value="qa">
                       <ChatbotQAPairs chatbotId={selectedBot.id} />
+                    </TabsContent>
+
+                    <TabsContent value="test">
+                      <ChatbotTest
+                        chatbotId={selectedBot.id}
+                        chatbotName={selectedBot.name}
+                        welcomeMessage={selectedBot.welcome_message || undefined}
+                        theme={selectedBot.theme}
+                      />
                     </TabsContent>
                   </Tabs>
                 </CardContent>
