@@ -29,46 +29,39 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="py-24 relative">
+    <section id="how-it-works" className="py-24 relative bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6">
-            Launch Your Chatbot in
-            <span className="gradient-text"> 4 Simple Steps</span>
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            From setup to deployment, get your AI chatbot running in under an hour.
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-16">
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm mb-4">
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              <span className="text-foreground font-medium">Features</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-foreground">
+              Build the perfect customer-facing
+              <span className="block">AI agent</span>
+            </h2>
+          </div>
+          <p className="text-lg text-muted-foreground max-w-md lg:pt-16">
+            ChatFlow gives you all the tools you need to train your perfect AI agent and connect it to your systems.
           </p>
         </div>
 
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary/50 to-transparent -translate-y-1/2" />
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, index) => (
-              <div
-                key={step.number}
-                className="relative group"
-                style={{ animationDelay: `${index * 150}ms` }}
-              >
-                {/* Card */}
-                <div className="p-6 rounded-2xl bg-card border border-border group-hover:border-primary/50 transition-all duration-300 group-hover:shadow-xl group-hover:shadow-primary/5">
-                  {/* Number Badge */}
-                  <div className="absolute -top-4 left-6 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-sm font-bold text-primary-foreground">
-                    {step.number}
-                  </div>
-
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mt-2 group-hover:bg-primary/20 transition-colors">
-                    <step.icon className="w-7 h-7 text-primary" />
-                  </div>
-
-                  <h3 className="font-display text-xl font-semibold mb-3">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
-                </div>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {steps.map((step, index) => (
+            <div
+              key={step.number}
+              className="relative group p-8 rounded-3xl bg-card border border-border transition-all duration-300"
+              style={{ animationDelay: `${index * 150}ms` }}
+            >
+              <div className="w-14 h-14 rounded-2xl bg-foreground flex items-center justify-center mb-6">
+                <step.icon className="w-7 h-7 text-background" />
               </div>
-            ))}
-          </div>
+
+              <h3 className="font-display text-xl font-bold mb-3 text-foreground">{step.title}</h3>
+              <p className="text-muted-foreground">{step.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

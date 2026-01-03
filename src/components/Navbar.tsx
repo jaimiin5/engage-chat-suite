@@ -7,40 +7,33 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/50">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-border">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-primary-foreground" />
+            <div className="w-8 h-8 rounded-lg bg-foreground flex items-center justify-center">
+              <MessageSquare className="w-4 h-4 text-background" />
             </div>
-            <span className="font-display text-xl font-bold">ChatFlow</span>
+            <span className="font-display text-xl font-bold text-foreground">ChatFlow</span>
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
-              Features
-            </a>
-            <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#pricing" className="text-foreground hover:text-foreground/70 transition-colors font-medium">
               Pricing
             </a>
-            <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">
-              How it Works
+            <a href="#features" className="text-foreground hover:text-foreground/70 transition-colors font-medium">
+              Enterprise
             </a>
-            <Link to="/widget-demo" className="text-muted-foreground hover:text-foreground transition-colors">
-              Demo
+            <Link to="/widget-demo" className="text-foreground hover:text-foreground/70 transition-colors font-medium">
+              Resources
             </Link>
-            <a href="#docs" className="text-muted-foreground hover:text-foreground transition-colors">
-              Docs
-            </a>
           </div>
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3">
-            <Button variant="ghost" asChild><Link to="/auth">Sign In</Link></Button>
-            <Button variant="hero" asChild><Link to="/auth">Get Started Free</Link></Button>
+            <Button variant="ghost" asChild><Link to="/auth">Dashboard</Link></Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -54,26 +47,21 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="md:hidden py-4 border-t border-border/50 animate-fade-in">
+          <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <div className="flex flex-col gap-4">
-              <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors py-2">
-                Features
-              </a>
-              <a href="#pricing" className="text-muted-foreground hover:text-foreground transition-colors py-2">
+              <a href="#pricing" className="text-foreground hover:text-foreground/70 transition-colors py-2 font-medium">
                 Pricing
               </a>
-              <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors py-2">
-                How it Works
+              <a href="#features" className="text-foreground hover:text-foreground/70 transition-colors py-2 font-medium">
+                Enterprise
               </a>
-              <Link to="/widget-demo" className="text-muted-foreground hover:text-foreground transition-colors py-2">
-                Demo
+              <Link to="/widget-demo" className="text-foreground hover:text-foreground/70 transition-colors py-2 font-medium">
+                Resources
               </Link>
-              <a href="#docs" className="text-muted-foreground hover:text-foreground transition-colors py-2">
-                Docs
-              </a>
-              <div className="flex flex-col gap-2 pt-4 border-t border-border/50">
-                <Button variant="ghost" className="w-full">Sign In</Button>
-                <Button variant="hero" className="w-full">Get Started Free</Button>
+              <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                <Button variant="default" className="w-full" asChild>
+                  <Link to="/auth">Dashboard</Link>
+                </Button>
               </div>
             </div>
           </div>
