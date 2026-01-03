@@ -56,52 +56,52 @@ const plans = [
 
 const PricingSection = () => {
   return (
-    <section id="pricing" className="py-24 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-accent/10 via-background to-background" />
-      
+    <section id="pricing" className="py-24 relative bg-secondary/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6">
-            Simple, Transparent
-            <span className="gradient-text"> Pricing</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm mb-4">
+            <span className="w-2 h-2 rounded-full bg-accent" />
+            <span className="text-foreground font-medium">Pricing</span>
+          </div>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6 text-foreground">
+            Simple, Transparent Pricing
           </h2>
           <p className="text-lg text-muted-foreground">
             Start free and scale as you grow. No hidden fees, no surprises.
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={plan.name}
-              className={`relative p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02] ${
+              className={`relative p-8 rounded-3xl border transition-all duration-300 ${
                 plan.popular
-                  ? 'bg-gradient-to-b from-primary/10 to-card border-primary/50 shadow-xl shadow-primary/10'
-                  : 'bg-card border-border hover:border-primary/30'
+                  ? 'bg-foreground text-background border-foreground'
+                  : 'bg-card border-border'
               }`}
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {plan.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-sm font-medium text-primary-foreground flex items-center gap-1">
-                  <Sparkles className="w-4 h-4" />
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent text-sm font-medium text-background">
                   Most Popular
                 </div>
               )}
 
               <div className="mb-6">
-                <h3 className="font-display text-2xl font-bold mb-2">{plan.name}</h3>
+                <h3 className={`font-display text-2xl font-bold mb-2 ${plan.popular ? 'text-background' : 'text-foreground'}`}>{plan.name}</h3>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-muted-foreground">/{plan.period}</span>
+                  <span className={`text-4xl font-bold ${plan.popular ? 'text-background' : 'text-foreground'}`}>{plan.price}</span>
+                  <span className={plan.popular ? 'text-background/70' : 'text-muted-foreground'}>/{plan.period}</span>
                 </div>
-                <p className="text-sm text-muted-foreground mt-2">{plan.description}</p>
+                <p className={`text-sm mt-2 ${plan.popular ? 'text-background/70' : 'text-muted-foreground'}`}>{plan.description}</p>
               </div>
 
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm">
-                    <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                      <Check className="w-3 h-3 text-primary" />
+                  <li key={feature} className={`flex items-center gap-3 text-sm ${plan.popular ? 'text-background' : 'text-foreground'}`}>
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${plan.popular ? 'bg-background/20' : 'bg-foreground/10'}`}>
+                      <Check className={`w-3 h-3 ${plan.popular ? 'text-background' : 'text-foreground'}`} />
                     </div>
                     {feature}
                   </li>
@@ -109,8 +109,8 @@ const PricingSection = () => {
               </ul>
 
               <Button
-                variant={plan.popular ? "hero" : "outline"}
-                className="w-full"
+                variant={plan.popular ? "secondary" : "default"}
+                className={`w-full ${plan.popular ? 'bg-background text-foreground hover:bg-background/90' : ''}`}
                 size="lg"
               >
                 {plan.cta}

@@ -56,38 +56,24 @@ const ChatWidget = () => {
   }, [currentDemo]);
 
   return (
-    <div className="w-full max-w-sm bg-card rounded-2xl border border-border overflow-hidden shadow-2xl shadow-primary/10">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-accent p-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center">
-            <Bot className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-primary-foreground">ChatFlow Assistant</h3>
-            <p className="text-xs text-primary-foreground/80">Always online</p>
-          </div>
-          <div className="ml-auto w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-        </div>
-      </div>
-
-      {/* Messages */}
-      <div className="h-72 overflow-y-auto p-4 space-y-3 bg-background/50">
+    <div className="w-full max-w-md bg-card rounded-3xl border border-border overflow-hidden shadow-xl">
+      {/* Chat Area */}
+      <div className="h-80 overflow-y-auto p-6 space-y-4 bg-secondary/30">
         {messages.map((message) => (
           <div
             key={message.id}
             className={`flex gap-2 ${message.isBot ? '' : 'justify-end'} animate-fade-in`}
           >
             {message.isBot && (
-              <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-4 h-4 text-primary" />
+              <div className="w-8 h-8 rounded-full bg-foreground flex items-center justify-center flex-shrink-0">
+                <Bot className="w-4 h-4 text-background" />
               </div>
             )}
             <div
-              className={`max-w-[80%] px-4 py-2 rounded-2xl text-sm ${
+              className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm ${
                 message.isBot
-                  ? 'bg-secondary text-secondary-foreground rounded-tl-none'
-                  : 'bg-primary text-primary-foreground rounded-tr-none'
+                  ? 'bg-card border border-border text-foreground'
+                  : 'bg-foreground text-background'
               }`}
             >
               {message.typing ? (
@@ -101,26 +87,25 @@ const ChatWidget = () => {
               )}
             </div>
             {!message.isBot && (
-              <div className="w-7 h-7 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                <User className="w-4 h-4 text-accent" />
+              <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                <img 
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=user" 
+                  alt="User" 
+                  className="w-full h-full"
+                />
               </div>
             )}
           </div>
         ))}
       </div>
 
-      {/* Input */}
-      <div className="p-3 border-t border-border">
-        <div className="flex items-center gap-2 bg-secondary rounded-xl px-4 py-2">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 bg-transparent text-sm outline-none text-foreground placeholder:text-muted-foreground"
-            disabled
-          />
-          <button className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center hover:bg-primary/90 transition-colors">
-            <Send className="w-4 h-4 text-primary-foreground" />
-          </button>
+      {/* Playback Control */}
+      <div className="p-4 flex justify-center">
+        <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
+          <div className="w-3 h-3 border-l-2 border-r-2 border-foreground/50 flex gap-0.5">
+            <div className="w-1 h-3 bg-foreground/50 rounded-full" />
+            <div className="w-1 h-3 bg-foreground/50 rounded-full" />
+          </div>
         </div>
       </div>
     </div>

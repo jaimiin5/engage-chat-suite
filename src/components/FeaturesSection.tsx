@@ -45,33 +45,36 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="py-24 relative">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-secondary/20 to-background" />
-      
+    <section id="features" className="py-24 relative bg-secondary/30">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold mb-6">
-            Everything You Need to Build
-            <span className="gradient-text"> Amazing Chatbots</span>
-          </h2>
-          <p className="text-lg text-muted-foreground">
-            From simple FAQ bots to complex AI assistants, our platform provides all the tools you need.
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 mb-16">
+          <div>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border text-sm mb-4">
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              <span className="text-foreground font-medium">Highlights</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold text-foreground">
+              The complete platform for
+              <span className="block">AI support agents</span>
+            </h2>
+          </div>
+          <p className="text-lg text-muted-foreground max-w-md lg:pt-16">
+            ChatFlow is designed for building AI support agents that solve your customers' hardest problems while improving business outcomes.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {features.map((feature, index) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.slice(0, 3).map((feature, index) => (
             <div
               key={feature.title}
-              className="group p-6 rounded-2xl bg-card border border-border hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
+              className="group p-8 rounded-3xl bg-card border border-border hover:border-border/80 transition-all duration-300"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <feature.icon className="w-6 h-6 text-primary" />
+              <div className="w-14 h-14 rounded-2xl bg-foreground flex items-center justify-center mb-6">
+                <feature.icon className="w-7 h-7 text-background" />
               </div>
-              <h3 className="font-display text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground">{feature.description}</p>
+              <h3 className="font-display text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
+              <p className="text-muted-foreground">{feature.description}</p>
             </div>
           ))}
         </div>
