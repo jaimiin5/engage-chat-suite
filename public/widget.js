@@ -393,46 +393,56 @@
           throw new Error(error.error || 'Failed to get response');
         }
 
-        // Handle streaming
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let assistantMessage = '';
-        let buffer = '';
+        // Check if response is JSON (non-streaming) or stream
+        const contentType = response.headers.get('content-type') || '';
+        
+        if (contentType.includes('application/json')) {
+          // Non-streaming response (AI disabled mode)
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content || "I couldn't find relevant information.";
+          messages.push({ role: 'assistant', content });
+        } else {
+          // Handle streaming
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let assistantMessage = '';
+          let buffer = '';
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
 
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || '';
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
 
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6).trim();
-              if (data === '[DONE]') continue;
-              try {
-                const parsed = JSON.parse(data);
-                const content = parsed.choices?.[0]?.delta?.content;
-                if (content) {
-                  assistantMessage += content;
-                  // Update the last message or add new
-                  const lastMsg = messages[messages.length - 1];
-                  if (lastMsg?.role === 'assistant') {
-                    lastMsg.content = assistantMessage;
-                  } else {
-                    messages.push({ role: 'assistant', content: assistantMessage });
+            for (const line of lines) {
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6).trim();
+                if (data === '[DONE]') continue;
+                try {
+                  const parsed = JSON.parse(data);
+                  const content = parsed.choices?.[0]?.delta?.content;
+                  if (content) {
+                    assistantMessage += content;
+                    // Update the last message or add new
+                    const lastMsg = messages[messages.length - 1];
+                    if (lastMsg?.role === 'assistant') {
+                      lastMsg.content = assistantMessage;
+                    } else {
+                      messages.push({ role: 'assistant', content: assistantMessage });
+                    }
+                    isLoading = false;
+                    renderMessages();
                   }
-                  isLoading = false;
-                  renderMessages();
-                }
-              } catch (e) { /* ignore parse errors */ }
+                } catch (e) { /* ignore parse errors */ }
+              }
             }
           }
-        }
 
-        if (!assistantMessage) {
-          messages.push({ role: 'assistant', content: "I'm sorry, I couldn't generate a response." });
+          if (!assistantMessage) {
+            messages.push({ role: 'assistant', content: "I'm sorry, I couldn't generate a response." });
+          }
         }
       } catch (error) {
         console.error('EngageChat error:', error);

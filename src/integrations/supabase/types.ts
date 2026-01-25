@@ -221,6 +221,7 @@ export type Database = {
       }
       organization_settings: {
         Row: {
+          ai_enabled: boolean
           ai_provider: Database["public"]["Enums"]["ai_provider"]
           api_key_encrypted: string | null
           created_at: string
@@ -230,6 +231,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ai_enabled?: boolean
           ai_provider?: Database["public"]["Enums"]["ai_provider"]
           api_key_encrypted?: string | null
           created_at?: string
@@ -239,6 +241,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ai_enabled?: boolean
           ai_provider?: Database["public"]["Enums"]["ai_provider"]
           api_key_encrypted?: string | null
           created_at?: string

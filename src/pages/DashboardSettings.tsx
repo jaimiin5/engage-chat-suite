@@ -9,8 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Key, Loader2, Check, AlertTriangle, Zap } from "lucide-react";
+import { Key, Loader2, Check, AlertTriangle, Zap, Bot } from "lucide-react";
 import { toast } from "sonner";
+import { Switch } from "@/components/ui/switch";
 
 interface Organization {
   id: string;
@@ -24,6 +25,7 @@ interface OrgSettings {
   ai_provider: string;
   api_key_encrypted: string | null;
   model_preference: string | null;
+  ai_enabled: boolean;
 }
 
 const PROVIDERS = [
@@ -89,6 +91,7 @@ const DashboardSettings = () => {
       const updateData: any = {
         ai_provider: settings.ai_provider,
         model_preference: settings.model_preference,
+        ai_enabled: settings.ai_enabled,
       };
 
       // Only update API key if a new one was entered
@@ -226,27 +229,46 @@ const DashboardSettings = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Key className="h-5 w-5" />
+              <Bot className="h-5 w-5" />
               AI Configuration
             </CardTitle>
             <CardDescription>
-              {isFree
-                ? "Free tier requires your own API key. Upgrade for included AI credits."
-                : "Configure your AI provider and model preferences"}
+              Enable AI for intelligent responses, or use crawled website content for basic keyword matching
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {isFree && !hasApiKey && (
+            {/* AI Toggle */}
+            <div className="flex items-center justify-between p-4 border rounded-lg">
+              <div className="space-y-0.5">
+                <Label className="text-base font-medium">Enable AI Integration</Label>
+                <p className="text-sm text-muted-foreground">
+                  {settings?.ai_enabled 
+                    ? "Chatbots will use AI for intelligent responses" 
+                    : "Chatbots will use crawled website content and Q&A pairs only"}
+                </p>
+              </div>
+              <Switch
+                checked={settings?.ai_enabled || false}
+                onCheckedChange={(checked) =>
+                  setSettings((s) => s ? { ...s, ai_enabled: checked } : null)
+                }
+              />
+            </div>
+
+            {settings?.ai_enabled && !hasApiKey && isFree && (
               <div className="flex items-center gap-3 p-4 bg-destructive/10 border border-destructive/20 rounded-lg">
                 <AlertTriangle className="h-5 w-5 text-destructive" />
                 <div>
-                  <p className="font-medium text-destructive">API Key Required</p>
+                  <p className="font-medium text-destructive">API Key Required for AI</p>
                   <p className="text-sm text-muted-foreground">
-                    Add your own API key to use your chatbots, or upgrade to a paid plan for included AI.
+                    Add your API key below to enable AI responses, or disable AI to use website content only.
                   </p>
                 </div>
               </div>
             )}
+
+            {settings?.ai_enabled && (
+              <>
 
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
@@ -293,7 +315,7 @@ const DashboardSettings = () => {
 
             <div className="space-y-2">
               <Label htmlFor="api-key">
-                API Key {hasApiKey && <span className="text-green-500">(configured)</span>}
+                API Key {hasApiKey && <span className="text-emerald-500">(configured)</span>}
               </Label>
               <div className="flex gap-2">
                 <Input
@@ -314,6 +336,9 @@ const DashboardSettings = () => {
                 Your API key is stored securely and never exposed to the frontend
               </p>
             </div>
+
+              </>
+            )}
 
             <Button onClick={saveSettings} disabled={saving}>
               {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
