@@ -26,6 +26,7 @@ interface OrgSettings {
   ai_provider: string;
   api_key_encrypted: string | null;
   model_preference: string | null;
+  ai_enabled: boolean;
 }
 
 interface Organization {
@@ -58,6 +59,7 @@ serve(async (req) => {
     let organizationId: string | null = null;
     let isPaidTier = false;
     let websiteContext = "";
+    let aiEnabled = true;
 
     // If botId is provided, fetch chatbot config
     if (botId) {
@@ -107,12 +109,17 @@ serve(async (req) => {
       // Fetch organization settings
       const { data: orgSettings, error: orgError } = await supabase
         .from("organization_settings")
-        .select("ai_provider, api_key_encrypted, model_preference")
+        .select("ai_provider, api_key_encrypted, model_preference, ai_enabled")
         .eq("organization_id", organizationId)
         .maybeSingle();
 
       if (orgError) {
         console.error("Error fetching org settings:", orgError);
+      }
+
+      // Check if AI is enabled
+      if (orgSettings) {
+        aiEnabled = orgSettings.ai_enabled ?? true;
       }
 
       // Fetch organization to check tier
@@ -138,6 +145,63 @@ serve(async (req) => {
         }
       }
 
+      // If AI is disabled, use keyword-based response from website content
+      if (!aiEnabled) {
+        console.log("AI disabled, using keyword-based response from crawled content");
+        const userMessage = messages[messages.length - 1]?.content?.toLowerCase() || "";
+        
+        // Search through website content for relevant info
+        let response = "I'm sorry, I couldn't find specific information about that. Please try asking about topics covered on our website.";
+        
+        if (websiteContext && userMessage) {
+          // Simple keyword matching in website content
+          const lines = websiteContext.split('\n').filter(line => line.trim().length > 10);
+          const relevantLines: string[] = [];
+          const keywords = userMessage.split(/\s+/).filter(word => word.length > 3);
+          
+          for (const line of lines) {
+            const lowerLine = line.toLowerCase();
+            for (const keyword of keywords) {
+              if (lowerLine.includes(keyword)) {
+                relevantLines.push(line.trim());
+                break;
+              }
+            }
+            if (relevantLines.length >= 5) break;
+          }
+          
+          if (relevantLines.length > 0) {
+            response = "Based on our website information:\n\n" + relevantLines.join("\n\n");
+          }
+        }
+
+        // Increment usage
+        if (organizationId && org) {
+          await supabase
+            .from("organizations")
+            .update({ messages_used: (org.messages_used || 0) + 1 })
+            .eq("id", organizationId);
+
+          await supabase.from("usage_logs").insert({
+            organization_id: organizationId,
+            chatbot_id: botId,
+            message_count: 1,
+          });
+        }
+
+        // Return non-streaming response for non-AI mode
+        return new Response(
+          JSON.stringify({ 
+            choices: [{ 
+              message: { role: "assistant", content: response },
+              finish_reason: "stop"
+            }] 
+          }),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
+      }
+
+      // AI is enabled - configure based on tier
       if (orgSettings) {
         if (isPaidTier) {
           // Paid tier: use Lovable AI
