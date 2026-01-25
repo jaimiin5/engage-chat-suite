@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ChatbotQAPairs from "@/components/dashboard/ChatbotQAPairs";
 import ChatbotTest from "@/components/dashboard/ChatbotTest";
+import WebsiteCrawler from "@/components/dashboard/WebsiteCrawler";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bot, Plus, Trash2, Copy, Code, Loader2, Settings, MessageSquare, Play } from "lucide-react";
+import { Bot, Plus, Trash2, Copy, Code, Loader2, Settings, MessageSquare, Play, Globe } from "lucide-react";
 import { toast } from "sonner";
 
 interface Chatbot {
@@ -27,6 +28,7 @@ interface Chatbot {
   theme: string;
   position: string;
   is_active: boolean;
+  website_url: string | null;
 }
 
 const DashboardChatbots = () => {
@@ -344,6 +346,10 @@ const DashboardChatbots = () => {
                         <Settings className="h-4 w-4" />
                         Settings
                       </TabsTrigger>
+                      <TabsTrigger value="website" className="gap-2">
+                        <Globe className="h-4 w-4" />
+                        Website
+                      </TabsTrigger>
                       <TabsTrigger value="qa" className="gap-2">
                         <MessageSquare className="h-4 w-4" />
                         Custom Q&A
@@ -462,6 +468,21 @@ const DashboardChatbots = () => {
                         {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                         Save Changes
                       </Button>
+                    </TabsContent>
+
+                    <TabsContent value="website">
+                      <WebsiteCrawler
+                        chatbotId={selectedBot.id}
+                        websiteUrl={selectedBot.website_url}
+                        onUrlChange={(url) => {
+                          setSelectedBot({ ...selectedBot, website_url: url });
+                          setChatbots(
+                            chatbots.map((b) =>
+                              b.id === selectedBot.id ? { ...b, website_url: url } : b
+                            )
+                          );
+                        }}
+                      />
                     </TabsContent>
 
                     <TabsContent value="qa">

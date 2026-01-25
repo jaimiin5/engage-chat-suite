@@ -58,6 +58,47 @@ export type Database = {
           },
         ]
       }
+      chatbot_website_content: {
+        Row: {
+          chatbot_id: string
+          content: string
+          crawled_at: string
+          created_at: string
+          id: string
+          title: string | null
+          updated_at: string
+          website_url: string
+        }
+        Insert: {
+          chatbot_id: string
+          content: string
+          crawled_at?: string
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          website_url: string
+        }
+        Update: {
+          chatbot_id?: string
+          content?: string
+          crawled_at?: string
+          created_at?: string
+          id?: string
+          title?: string | null
+          updated_at?: string
+          website_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_website_content_chatbot_id_fkey"
+            columns: ["chatbot_id"]
+            isOneToOne: true
+            referencedRelation: "chatbots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chatbots: {
         Row: {
           created_at: string
@@ -70,6 +111,7 @@ export type Database = {
           system_prompt: string
           theme: string | null
           updated_at: string
+          website_url: string | null
           welcome_message: string | null
         }
         Insert: {
@@ -83,6 +125,7 @@ export type Database = {
           system_prompt?: string
           theme?: string | null
           updated_at?: string
+          website_url?: string | null
           welcome_message?: string | null
         }
         Update: {
@@ -96,6 +139,7 @@ export type Database = {
           system_prompt?: string
           theme?: string | null
           updated_at?: string
+          website_url?: string | null
           welcome_message?: string | null
         }
         Relationships: [
