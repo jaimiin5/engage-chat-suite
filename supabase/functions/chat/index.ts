@@ -57,6 +57,7 @@ serve(async (req) => {
     let model = "google/gemini-2.5-flash";
     let organizationId: string | null = null;
     let isPaidTier = false;
+    let websiteContext = "";
 
     // If botId is provided, fetch chatbot config
     if (botId) {
@@ -86,6 +87,22 @@ serve(async (req) => {
 
       systemPrompt = chatbot.system_prompt || systemPrompt;
       organizationId = chatbot.organization_id;
+
+      // Fetch website content if available
+      const { data: websiteContent, error: websiteError } = await supabase
+        .from("chatbot_website_content")
+        .select("content, website_url, title")
+        .eq("chatbot_id", botId)
+        .maybeSingle();
+
+      if (websiteError) {
+        console.error("Error fetching website content:", websiteError);
+      }
+
+      if (websiteContent?.content) {
+        console.log(`Found website content for chatbot: ${websiteContent.website_url}`);
+        websiteContext = `\n\n## Website Knowledge Base\nThe following is content from the website ${websiteContent.website_url}${websiteContent.title ? ` (${websiteContent.title})` : ""}. Use this information to answer questions about the website, company, products, or services:\n\n${websiteContent.content}`;
+      }
 
       // Fetch organization settings
       const { data: orgSettings, error: orgError } = await supabase
@@ -175,7 +192,7 @@ serve(async (req) => {
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
           messages: [
-            { role: "system", content: systemPrompt },
+            { role: "system", content: systemPrompt + websiteContext },
             ...messages,
           ],
           stream: true,
@@ -191,7 +208,7 @@ serve(async (req) => {
         body: JSON.stringify({
           model: model || "gpt-4o-mini",
           messages: [
-            { role: "system", content: systemPrompt },
+            { role: "system", content: systemPrompt + websiteContext },
             ...messages,
           ],
           stream: true,
@@ -208,7 +225,7 @@ serve(async (req) => {
         body: JSON.stringify({
           model: model || "claude-3-haiku-20240307",
           max_tokens: 1024,
-          system: systemPrompt,
+          system: systemPrompt + websiteContext,
           messages: messages.map(m => ({ role: m.role === "assistant" ? "assistant" : "user", content: m.content })),
           stream: true,
         }),
@@ -223,7 +240,7 @@ serve(async (req) => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [
-              { role: "user", parts: [{ text: systemPrompt }] },
+              { role: "user", parts: [{ text: systemPrompt + websiteContext }] },
               ...messages.map(m => ({
                 role: m.role === "assistant" ? "model" : "user",
                 parts: [{ text: m.content }],
