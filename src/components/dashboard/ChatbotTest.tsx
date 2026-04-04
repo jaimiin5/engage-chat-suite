@@ -276,13 +276,13 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
             <div
               className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center",
-                isDark ? "bg-violet-500/20" : "bg-blue-500/20"
+                isDark ? "bg-gray-700" : "bg-gray-200"
               )}
             >
               <Bot
                 className={cn(
                   "w-4 h-4",
-                  isDark ? "text-violet-400" : "text-blue-500"
+                  isDark ? "text-gray-300" : "text-gray-600"
                 )}
               />
             </div>
@@ -338,13 +338,13 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
                 <div
                   className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
-                    isDark ? "bg-violet-500/20" : "bg-blue-500/20"
+                    isDark ? "bg-gray-700" : "bg-gray-200"
                   )}
                 >
                   <Bot
                     className={cn(
                       "w-3 h-3",
-                      isDark ? "text-violet-400" : "text-blue-500"
+                      isDark ? "text-gray-300" : "text-gray-600"
                     )}
                   />
                 </div>
@@ -354,8 +354,8 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
                   "max-w-[80%] px-3 py-2 rounded-xl text-sm",
                   message.role === "user"
                     ? isDark
-                      ? "bg-violet-600 text-white rounded-tr-sm"
-                      : "bg-blue-500 text-white rounded-tr-sm"
+                      ? "bg-gray-200 text-gray-900 rounded-tr-sm"
+                      : "bg-gray-900 text-white rounded-tr-sm"
                     : isDark
                     ? "bg-gray-800 text-gray-100 rounded-tl-sm"
                     : "bg-gray-100 text-gray-900 rounded-tl-sm"
@@ -382,13 +382,13 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
                 <div
                   className={cn(
                     "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
-                    isDark ? "bg-cyan-500/20" : "bg-green-500/20"
+                    isDark ? "bg-gray-700" : "bg-gray-200"
                   )}
                 >
                   <User
                     className={cn(
                       "w-3 h-3",
-                      isDark ? "text-cyan-400" : "text-green-500"
+                      isDark ? "text-gray-300" : "text-gray-600"
                     )}
                   />
                 </div>
@@ -424,7 +424,7 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
               size="icon"
-              className={isDark ? "bg-violet-600 hover:bg-violet-700" : ""}
+              className={isDark ? "bg-gray-200 text-gray-900 hover:bg-gray-300" : ""}
             >
               <Send className="h-4 w-4" />
             </Button>
