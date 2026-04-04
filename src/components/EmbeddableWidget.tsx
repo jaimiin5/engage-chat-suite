@@ -278,7 +278,7 @@ const EmbeddableWidget = ({
                   currentTheme.button
                 )}
               >
-                <Send className="w-4 h-4 text-white" />
+                <Send className={cn("w-4 h-4", theme === "dark" ? "text-gray-900" : "text-white")} />
               </button>
             </div>
           </form>
