@@ -388,7 +388,7 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
                   <User
                     className={cn(
                       "w-3 h-3",
-                      isDark ? "text-cyan-400" : "text-green-500"
+                      isDark ? "text-gray-300" : "text-gray-600"
                     )}
                   />
                 </div>
