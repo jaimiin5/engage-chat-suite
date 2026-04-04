@@ -164,21 +164,21 @@ const EmbeddableWidget = ({
   const themeClasses = {
     light: {
       container: "bg-white text-gray-900 border-gray-200",
-      header: "bg-gradient-to-r from-blue-500 to-purple-600",
+      header: "bg-gray-900",
       headerText: "text-white",
       input: "bg-gray-100 text-gray-900 placeholder:text-gray-500",
-      userBubble: "bg-blue-500 text-white",
+      userBubble: "bg-gray-900 text-white",
       botBubble: "bg-gray-100 text-gray-900",
-      button: "bg-blue-500 hover:bg-blue-600",
+      button: "bg-gray-900 hover:bg-gray-800",
     },
     dark: {
-      container: "bg-gray-900 text-white border-gray-700",
-      header: "bg-gradient-to-r from-violet-600 to-cyan-500",
+      container: "bg-gray-950 text-white border-gray-800",
+      header: "bg-gray-900",
       headerText: "text-white",
       input: "bg-gray-800 text-white placeholder:text-gray-400",
-      userBubble: "bg-violet-600 text-white",
+      userBubble: "bg-white text-gray-900",
       botBubble: "bg-gray-800 text-gray-100",
-      button: "bg-violet-600 hover:bg-violet-700",
+      button: "bg-white hover:bg-gray-100",
     },
   };
 
