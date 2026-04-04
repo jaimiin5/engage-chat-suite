@@ -290,10 +290,7 @@ const EmbeddableWidget = ({
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105",
-          isOpen ? "rotate-0" : "rotate-0",
-          theme === "dark"
-            ? "bg-gradient-to-r from-violet-600 to-cyan-500 text-white"
-            : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+          "bg-gray-900 text-white hover:bg-gray-800"
         )}
         style={primaryColor ? { background: primaryColor } : undefined}
       >
