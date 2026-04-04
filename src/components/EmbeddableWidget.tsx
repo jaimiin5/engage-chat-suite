@@ -228,8 +228,8 @@ const EmbeddableWidget = ({
                 )}
               >
                 {message.role === "assistant" && (
-                  <div className="w-7 h-7 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-violet-400" />
+                  <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                   </div>
                 )}
                 <div
