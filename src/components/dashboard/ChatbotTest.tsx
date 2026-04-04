@@ -424,7 +424,7 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
               size="icon"
-              className={isDark ? "bg-violet-600 hover:bg-violet-700" : ""}
+              className={isDark ? "bg-gray-200 text-gray-900 hover:bg-gray-300" : ""}
             >
               <Send className="h-4 w-4" />
             </Button>
