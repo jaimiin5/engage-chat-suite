@@ -354,8 +354,8 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
                   "max-w-[80%] px-3 py-2 rounded-xl text-sm",
                   message.role === "user"
                     ? isDark
-                      ? "bg-violet-600 text-white rounded-tr-sm"
-                      : "bg-blue-500 text-white rounded-tr-sm"
+                      ? "bg-gray-200 text-gray-900 rounded-tr-sm"
+                      : "bg-gray-900 text-white rounded-tr-sm"
                     : isDark
                     ? "bg-gray-800 text-gray-100 rounded-tl-sm"
                     : "bg-gray-100 text-gray-900 rounded-tl-sm"
