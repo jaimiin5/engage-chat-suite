@@ -164,21 +164,21 @@ const EmbeddableWidget = ({
   const themeClasses = {
     light: {
       container: "bg-white text-gray-900 border-gray-200",
-      header: "bg-gradient-to-r from-blue-500 to-purple-600",
+      header: "bg-gray-900",
       headerText: "text-white",
       input: "bg-gray-100 text-gray-900 placeholder:text-gray-500",
-      userBubble: "bg-blue-500 text-white",
+      userBubble: "bg-gray-900 text-white",
       botBubble: "bg-gray-100 text-gray-900",
-      button: "bg-blue-500 hover:bg-blue-600",
+      button: "bg-gray-900 hover:bg-gray-800",
     },
     dark: {
-      container: "bg-gray-900 text-white border-gray-700",
-      header: "bg-gradient-to-r from-violet-600 to-cyan-500",
+      container: "bg-gray-950 text-white border-gray-800",
+      header: "bg-gray-900",
       headerText: "text-white",
       input: "bg-gray-800 text-white placeholder:text-gray-400",
-      userBubble: "bg-violet-600 text-white",
+      userBubble: "bg-white text-gray-900",
       botBubble: "bg-gray-800 text-gray-100",
-      button: "bg-violet-600 hover:bg-violet-700",
+      button: "bg-white hover:bg-gray-100",
     },
   };
 
@@ -228,8 +228,8 @@ const EmbeddableWidget = ({
                 )}
               >
                 {message.role === "assistant" && (
-                  <div className="w-7 h-7 rounded-full bg-violet-500/20 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-violet-400" />
+                  <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                    <Bot className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                   </div>
                 )}
                 <div
@@ -249,8 +249,8 @@ const EmbeddableWidget = ({
                   )}
                 </div>
                 {message.role === "user" && (
-                  <div className="w-7 h-7 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-cyan-400" />
+                  <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
+                    <User className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                   </div>
                 )}
               </div>
@@ -278,7 +278,7 @@ const EmbeddableWidget = ({
                   currentTheme.button
                 )}
               >
-                <Send className="w-4 h-4 text-white" />
+                <Send className={cn("w-4 h-4", theme === "dark" ? "text-gray-900" : "text-white")} />
               </button>
             </div>
           </form>
@@ -290,10 +290,7 @@ const EmbeddableWidget = ({
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
           "w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105",
-          isOpen ? "rotate-0" : "rotate-0",
-          theme === "dark"
-            ? "bg-gradient-to-r from-violet-600 to-cyan-500 text-white"
-            : "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+          "bg-gray-900 text-white hover:bg-gray-800"
         )}
         style={primaryColor ? { background: primaryColor } : undefined}
       >
