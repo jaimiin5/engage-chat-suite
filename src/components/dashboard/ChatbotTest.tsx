@@ -276,7 +276,7 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }:
             <div
               className={cn(
                 "w-8 h-8 rounded-full flex items-center justify-center",
-                isDark ? "bg-violet-500/20" : "bg-blue-500/20"
+                isDark ? "bg-gray-700" : "bg-gray-200"
               )}
             >
               <Bot
