@@ -174,7 +174,7 @@ const DashboardChatbots = () => {
   const getEmbedCode = () => {
     if (!selectedBot) return "";
     const baseUrl = window.location.origin;
-    return `<script src="${baseUrl}/widget.js" data-bot-id="${selectedBot.id}" data-theme="${selectedBot.theme}" data-position="${selectedBot.position}"></script>`;
+    return `<script src="${baseUrl}/widget.js" data-bot-id="${selectedBot.id}" data-theme="${selectedBot.theme}" data-position="${selectedBot.position}" data-primary-color="${selectedBot.primary_color || '#000000'}" data-icon-type="${selectedBot.icon_type || 'icon'}"${selectedBot.icon_type === 'alphabet' && selectedBot.icon_text ? ` data-icon-text="${selectedBot.icon_text}"` : ''}></script>`;
   };
 
   const copyEmbedCode = () => {
@@ -329,7 +329,7 @@ const DashboardChatbots = () => {
                           </DialogDescription>
                         </DialogHeader>
                         <div className="relative">
-                          <pre className="p-4 bg-muted rounded-lg text-sm overflow-x-auto whitespace-pre-wrap break-all">
+                          <pre className="p-4 pr-12 bg-muted rounded-lg text-sm overflow-x-auto whitespace-pre-wrap break-all">
                             <code className="block">{getEmbedCode()}</code>
                           </pre>
                           <Button
