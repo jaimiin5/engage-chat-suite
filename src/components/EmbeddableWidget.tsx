@@ -13,6 +13,8 @@ interface EmbeddableWidgetProps {
   theme?: "light" | "dark";
   position?: "bottom-right" | "bottom-left";
   primaryColor?: string;
+  iconType?: "icon" | "alphabet";
+  iconText?: string;
   title?: string;
   subtitle?: string;
   welcomeMessage?: string;
@@ -25,7 +27,9 @@ const EmbeddableWidget = ({
   botId = "demo",
   theme = "dark",
   position = "bottom-right",
-  primaryColor,
+  primaryColor = "#000000",
+  iconType = "icon",
+  iconText = "",
   title = "ChatFlow Assistant",
   subtitle = "Always online",
   welcomeMessage = "Hi! 👋 I'm your AI assistant. How can I help you today?",
@@ -39,6 +43,19 @@ const EmbeddableWidget = ({
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const color = primaryColor || "#000000";
+
+  // Determine if color is light to pick contrasting text
+  const isLightColor = (hex: string) => {
+    const c = hex.replace("#", "");
+    const r = parseInt(c.substring(0, 2), 16);
+    const g = parseInt(c.substring(2, 4), 16);
+    const b = parseInt(c.substring(4, 6), 16);
+    return (r * 299 + g * 587 + b * 114) / 1000 > 150;
+  };
+
+  const colorTextClass = isLightColor(color) ? "text-gray-900" : "text-white";
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,9 +88,7 @@ const EmbeddableWidget = ({
     try {
       const response = await fetch(`${SUPABASE_URL}/functions/v1/chat`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           messages: allMessages.map(({ role, content }) => ({ role, content })),
           botId,
@@ -85,15 +100,12 @@ const EmbeddableWidget = ({
         throw new Error(errorData.error || "Failed to get response");
       }
 
-      if (!response.body) {
-        throw new Error("No response body");
-      }
+      if (!response.body) throw new Error("No response body");
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
 
-      // Add initial empty assistant message
       setMessages((prev) => [
         ...prev,
         { id: assistantId, role: "assistant", content: "" },
@@ -128,7 +140,7 @@ const EmbeddableWidget = ({
               );
             }
           } catch {
-            // Incomplete JSON, will be handled in next chunk
+            // Incomplete JSON
           }
         }
       }
@@ -150,7 +162,6 @@ const EmbeddableWidget = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
-
     const message = input.trim();
     setInput("");
     streamChat(message);
@@ -161,28 +172,27 @@ const EmbeddableWidget = ({
     "bottom-left": "bottom-4 left-4",
   };
 
-  const themeClasses = {
-    light: {
-      container: "bg-white text-gray-900 border-gray-200",
-      header: "bg-gray-900",
-      headerText: "text-white",
-      input: "bg-gray-100 text-gray-900 placeholder:text-gray-500",
-      userBubble: "bg-gray-900 text-white",
-      botBubble: "bg-gray-100 text-gray-900",
-      button: "bg-gray-900 hover:bg-gray-800",
-    },
-    dark: {
-      container: "bg-gray-950 text-white border-gray-800",
-      header: "bg-gray-900",
-      headerText: "text-white",
-      input: "bg-gray-800 text-white placeholder:text-gray-400",
-      userBubble: "bg-white text-gray-900",
-      botBubble: "bg-gray-800 text-gray-100",
-      button: "bg-white hover:bg-gray-100",
-    },
-  };
+  const isDark = theme === "dark";
 
-  const currentTheme = themeClasses[theme];
+  const renderBotAvatar = (size: "sm" | "md" = "sm") => {
+    const sizeClasses = size === "sm" ? "w-7 h-7 text-xs" : "w-10 h-10 text-sm";
+    const iconSize = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+
+    return (
+      <div
+        className={cn(
+          "rounded-full flex items-center justify-center flex-shrink-0 font-semibold",
+          sizeClasses,
+          colorTextClass
+        )}
+        style={{ backgroundColor: color }}
+      >
+        {iconType === "alphabet" && iconText
+          ? iconText.toUpperCase()
+          : <Bot className={iconSize} />}
+      </div>
+    );
+  };
 
   return (
     <div className={cn("fixed z-50", positionClasses[position])}>
@@ -191,34 +201,47 @@ const EmbeddableWidget = ({
         <div
           className={cn(
             "mb-4 w-[360px] max-h-[500px] rounded-2xl border shadow-2xl flex flex-col overflow-hidden animate-fade-in",
-            currentTheme.container
+            isDark
+              ? "bg-gray-950 text-white border-gray-800"
+              : "bg-white text-gray-900 border-gray-200"
           )}
         >
           {/* Header */}
-          <div className={cn("p-4", currentTheme.header)}>
+          <div className="p-4" style={{ backgroundColor: color }}>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-                <Bot className={cn("w-5 h-5", currentTheme.headerText)} />
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
+              >
+                {iconType === "alphabet" && iconText ? (
+                  <span className={cn("font-semibold text-sm", colorTextClass)}>
+                    {iconText.toUpperCase()}
+                  </span>
+                ) : (
+                  <Bot className={cn("w-5 h-5", colorTextClass)} />
+                )}
               </div>
               <div className="flex-1">
-                <h3 className={cn("font-semibold", currentTheme.headerText)}>
-                  {title}
-                </h3>
-                <p className={cn("text-xs opacity-80", currentTheme.headerText)}>
-                  {subtitle}
-                </p>
+                <h3 className={cn("font-semibold", colorTextClass)}>{title}</h3>
+                <p className={cn("text-xs opacity-80", colorTextClass)}>{subtitle}</p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+                className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors"
+                style={{ backgroundColor: "rgba(255,255,255,0.1)" }}
               >
-                <Minimize2 className={cn("w-4 h-4", currentTheme.headerText)} />
+                <Minimize2 className={cn("w-4 h-4", colorTextClass)} />
               </button>
             </div>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[280px] max-h-[320px]">
+          <div
+            className={cn(
+              "flex-1 overflow-y-auto p-4 space-y-3 min-h-[280px] max-h-[320px]",
+              isDark ? "bg-gray-950" : "bg-gray-50"
+            )}
+          >
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -227,18 +250,21 @@ const EmbeddableWidget = ({
                   message.role === "user" ? "justify-end" : ""
                 )}
               >
-                {message.role === "assistant" && (
-                  <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <Bot className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-                  </div>
-                )}
+                {message.role === "assistant" && renderBotAvatar("sm")}
                 <div
                   className={cn(
-                    "max-w-[80%] px-4 py-2 rounded-2xl text-sm",
+                    "max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed",
                     message.role === "user"
-                      ? cn(currentTheme.userBubble, "rounded-tr-sm")
-                      : cn(currentTheme.botBubble, "rounded-tl-sm")
+                      ? cn("rounded-tr-sm", colorTextClass)
+                      : isDark
+                        ? "bg-gray-800 text-gray-100 rounded-tl-sm"
+                        : "bg-white text-gray-900 rounded-tl-sm border border-gray-200"
                   )}
+                  style={
+                    message.role === "user"
+                      ? { backgroundColor: color }
+                      : undefined
+                  }
                 >
                   {message.content || (
                     <div className="flex gap-1">
@@ -249,8 +275,11 @@ const EmbeddableWidget = ({
                   )}
                 </div>
                 {message.role === "user" && (
-                  <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center flex-shrink-0">
-                    <User className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+                  <div className={cn(
+                    "w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0",
+                    isDark ? "bg-gray-700" : "bg-gray-200"
+                  )}>
+                    <User className={cn("w-4 h-4", isDark ? "text-gray-300" : "text-gray-600")} />
                   </div>
                 )}
               </div>
@@ -259,8 +288,21 @@ const EmbeddableWidget = ({
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="p-3 border-t border-inherit">
-            <div className={cn("flex items-center gap-2 rounded-xl px-4 py-2", currentTheme.input)}>
+          <form
+            onSubmit={handleSubmit}
+            className={cn(
+              "p-3 border-t",
+              isDark ? "border-gray-800" : "border-gray-200"
+            )}
+          >
+            <div
+              className={cn(
+                "flex items-center gap-2 rounded-xl px-4 py-2",
+                isDark
+                  ? "bg-gray-800 text-white placeholder:text-gray-400"
+                  : "bg-gray-100 text-gray-900 placeholder:text-gray-500"
+              )}
+            >
               <input
                 ref={inputRef}
                 type="text"
@@ -275,10 +317,11 @@ const EmbeddableWidget = ({
                 disabled={isLoading || !input.trim()}
                 className={cn(
                   "w-8 h-8 rounded-lg flex items-center justify-center transition-colors disabled:opacity-50",
-                  currentTheme.button
+                  colorTextClass
                 )}
+                style={{ backgroundColor: color }}
               >
-                <Send className={cn("w-4 h-4", theme === "dark" ? "text-gray-900" : "text-white")} />
+                <Send className="w-4 h-4" />
               </button>
             </div>
           </form>
@@ -289,13 +332,15 @@ const EmbeddableWidget = ({
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105",
-          "bg-gray-900 text-white hover:bg-gray-800"
+          "w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all duration-300 hover:scale-105 font-semibold",
+          colorTextClass
         )}
-        style={primaryColor ? { background: primaryColor } : undefined}
+        style={{ backgroundColor: color }}
       >
         {isOpen ? (
           <X className="w-6 h-6" />
+        ) : iconType === "alphabet" && iconText ? (
+          <span className="text-lg">{iconText.toUpperCase()}</span>
         ) : (
           <MessageCircle className="w-6 h-6" />
         )}
