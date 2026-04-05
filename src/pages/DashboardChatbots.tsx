@@ -29,6 +29,9 @@ interface Chatbot {
   position: string;
   is_active: boolean;
   website_url: string | null;
+  primary_color: string;
+  icon_type: string;
+  icon_text: string | null;
 }
 
 const DashboardChatbots = () => {
@@ -131,6 +134,9 @@ const DashboardChatbots = () => {
           theme: selectedBot.theme,
           position: selectedBot.position,
           is_active: selectedBot.is_active,
+          primary_color: selectedBot.primary_color,
+          icon_type: selectedBot.icon_type,
+          icon_text: selectedBot.icon_text,
         })
         .eq("id", selectedBot.id);
 
@@ -449,6 +455,86 @@ const DashboardChatbots = () => {
                         </div>
                       </div>
 
+                      {/* Widget Appearance */}
+                      <div className="space-y-4">
+                        <Label className="text-sm font-semibold">Widget Appearance</Label>
+                        
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div className="space-y-2">
+                            <Label htmlFor="primary-color">Primary Color</Label>
+                            <div className="flex items-center gap-3">
+                              <input
+                                id="primary-color"
+                                type="color"
+                                value={selectedBot.primary_color || "#000000"}
+                                onChange={(e) =>
+                                  setSelectedBot({ ...selectedBot, primary_color: e.target.value })
+                                }
+                                className="w-10 h-10 rounded-lg border border-border cursor-pointer p-0.5"
+                              />
+                              <Input
+                                value={selectedBot.primary_color || "#000000"}
+                                onChange={(e) =>
+                                  setSelectedBot({ ...selectedBot, primary_color: e.target.value })
+                                }
+                                className="flex-1 font-mono text-sm"
+                                placeholder="#000000"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-2">
+                            <Label>Icon Type</Label>
+                            <Select
+                              value={selectedBot.icon_type || "icon"}
+                              onValueChange={(value) =>
+                                setSelectedBot({ ...selectedBot, icon_type: value })
+                              }
+                            >
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="icon">Bot Icon</SelectItem>
+                                <SelectItem value="alphabet">Custom Letter</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        {selectedBot.icon_type === "alphabet" && (
+                          <div className="space-y-2">
+                            <Label htmlFor="icon-text">Icon Letter(s)</Label>
+                            <Input
+                              id="icon-text"
+                              value={selectedBot.icon_text || ""}
+                              onChange={(e) =>
+                                setSelectedBot({ ...selectedBot, icon_text: e.target.value.slice(0, 2) })
+                              }
+                              placeholder="AB"
+                              maxLength={2}
+                              className="w-32"
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              1-2 characters shown on the widget button and bot avatar
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Preview */}
+                        <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/50">
+                          <div
+                            className="w-12 h-12 rounded-full flex items-center justify-center text-white font-semibold text-sm"
+                            style={{ backgroundColor: selectedBot.primary_color || "#000000" }}
+                          >
+                            {selectedBot.icon_type === "alphabet" && selectedBot.icon_text
+                              ? selectedBot.icon_text.toUpperCase()
+                              : <Bot className="w-6 h-6" />}
+                          </div>
+                          <span className="text-sm text-muted-foreground">Widget button preview</span>
+                        </div>
+                      </div>
+
                       <div className="flex items-center justify-between">
                         <div className="space-y-0.5">
                           <Label>Active</Label>
@@ -495,6 +581,9 @@ const DashboardChatbots = () => {
                         chatbotName={selectedBot.name}
                         welcomeMessage={selectedBot.welcome_message || undefined}
                         theme={selectedBot.theme}
+                        primaryColor={selectedBot.primary_color}
+                        iconType={selectedBot.icon_type as "icon" | "alphabet"}
+                        iconText={selectedBot.icon_text || undefined}
                       />
                     </TabsContent>
                   </Tabs>

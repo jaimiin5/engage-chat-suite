@@ -103,11 +103,14 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          icon_text: string | null
+          icon_type: string | null
           id: string
           is_active: boolean
           name: string
           organization_id: string
           position: string | null
+          primary_color: string | null
           system_prompt: string
           theme: string | null
           updated_at: string
@@ -117,11 +120,14 @@ export type Database = {
         Insert: {
           created_at?: string
           description?: string | null
+          icon_text?: string | null
+          icon_type?: string | null
           id?: string
           is_active?: boolean
           name: string
           organization_id: string
           position?: string | null
+          primary_color?: string | null
           system_prompt?: string
           theme?: string | null
           updated_at?: string
@@ -131,11 +137,14 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string | null
+          icon_text?: string | null
+          icon_type?: string | null
           id?: string
           is_active?: boolean
           name?: string
           organization_id?: string
           position?: string | null
+          primary_color?: string | null
           system_prompt?: string
           theme?: string | null
           updated_at?: string
