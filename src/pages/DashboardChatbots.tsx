@@ -29,6 +29,9 @@ interface Chatbot {
   position: string;
   is_active: boolean;
   website_url: string | null;
+  primary_color: string;
+  icon_type: string;
+  icon_text: string | null;
 }
 
 const DashboardChatbots = () => {
@@ -131,6 +134,9 @@ const DashboardChatbots = () => {
           theme: selectedBot.theme,
           position: selectedBot.position,
           is_active: selectedBot.is_active,
+          primary_color: selectedBot.primary_color,
+          icon_type: selectedBot.icon_type,
+          icon_text: selectedBot.icon_text,
         })
         .eq("id", selectedBot.id);
 
