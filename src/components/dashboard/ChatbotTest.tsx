@@ -254,6 +254,8 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark", p
   };
 
   const colorTextClass = isLightColor(color) ? "text-gray-900" : "text-white";
+
+  return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
