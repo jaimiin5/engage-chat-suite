@@ -581,6 +581,9 @@ const DashboardChatbots = () => {
                         chatbotName={selectedBot.name}
                         welcomeMessage={selectedBot.welcome_message || undefined}
                         theme={selectedBot.theme}
+                        primaryColor={selectedBot.primary_color}
+                        iconType={selectedBot.icon_type as "icon" | "alphabet"}
+                        iconText={selectedBot.icon_text || undefined}
                       />
                     </TabsContent>
                   </Tabs>
