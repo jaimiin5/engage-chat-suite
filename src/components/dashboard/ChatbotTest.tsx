@@ -23,9 +23,12 @@ interface ChatbotTestProps {
   chatbotName: string;
   welcomeMessage?: string;
   theme?: string;
+  primaryColor?: string;
+  iconType?: "icon" | "alphabet";
+  iconText?: string;
 }
 
-const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark" }: ChatbotTestProps) => {
+const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark", primaryColor = "#000000", iconType = "icon", iconText = "" }: ChatbotTestProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
