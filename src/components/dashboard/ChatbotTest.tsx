@@ -279,42 +279,27 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark", p
       >
         {/* Header */}
         <div
-          className={cn(
-            "px-4 py-3 border-b",
-            isDark
-              ? "bg-gray-800 border-gray-700"
-              : "bg-gray-50 border-gray-200"
-          )}
+          className="px-4 py-3 border-b border-black/10"
+          style={{ backgroundColor: color }}
         >
           <div className="flex items-center gap-3">
             <div
-              className={cn(
-                "w-8 h-8 rounded-full flex items-center justify-center",
-                isDark ? "bg-gray-700" : "bg-gray-200"
-              )}
+              className="w-8 h-8 rounded-full flex items-center justify-center"
+              style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
             >
-              <Bot
-                className={cn(
-                  "w-4 h-4",
-                  isDark ? "text-gray-300" : "text-gray-600"
-                )}
-              />
+              {iconType === "alphabet" && iconText ? (
+                <span className={cn("text-xs font-semibold", colorTextClass)}>
+                  {iconText.toUpperCase()}
+                </span>
+              ) : (
+                <Bot className={cn("w-4 h-4", colorTextClass)} />
+              )}
             </div>
             <div>
-              <p
-                className={cn(
-                  "text-sm font-medium",
-                  isDark ? "text-white" : "text-gray-900"
-                )}
-              >
+              <p className={cn("text-sm font-medium", colorTextClass)}>
                 {chatbotName}
               </p>
-              <p
-                className={cn(
-                  "text-xs",
-                  isDark ? "text-gray-400" : "text-gray-500"
-                )}
-              >
+              <p className={cn("text-xs opacity-80", colorTextClass)}>
                 Test Mode
               </p>
             </div>
@@ -350,30 +335,26 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark", p
             >
               {message.role === "assistant" && (
                 <div
-                  className={cn(
-                    "w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0",
-                    isDark ? "bg-gray-700" : "bg-gray-200"
-                  )}
+                  className={cn("w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0", colorTextClass)}
+                  style={{ backgroundColor: color }}
                 >
-                  <Bot
-                    className={cn(
-                      "w-3 h-3",
-                      isDark ? "text-gray-300" : "text-gray-600"
-                    )}
-                  />
+                  {iconType === "alphabet" && iconText ? (
+                    <span className="text-[10px] font-semibold">{iconText.toUpperCase()}</span>
+                  ) : (
+                    <Bot className="w-3 h-3" />
+                  )}
                 </div>
               )}
               <div
                 className={cn(
                   "max-w-[80%] px-3 py-2 rounded-xl text-sm",
                   message.role === "user"
-                    ? isDark
-                      ? "bg-gray-200 text-gray-900 rounded-tr-sm"
-                      : "bg-gray-900 text-white rounded-tr-sm"
+                    ? cn("rounded-tr-sm", colorTextClass)
                     : isDark
                     ? "bg-gray-800 text-gray-100 rounded-tl-sm"
-                    : "bg-gray-100 text-gray-900 rounded-tl-sm"
+                    : "bg-white text-gray-900 rounded-tl-sm border border-gray-200"
                 )}
+                style={message.role === "user" ? { backgroundColor: color } : undefined}
               >
                 {message.content || (
                   <div className="flex gap-1">
@@ -438,7 +419,8 @@ const ChatbotTest = ({ chatbotId, chatbotName, welcomeMessage, theme = "dark", p
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
               size="icon"
-              className={isDark ? "bg-gray-200 text-gray-900 hover:bg-gray-300" : ""}
+              className={cn("border-0", colorTextClass)}
+              style={{ backgroundColor: color }}
             >
               <Send className="h-4 w-4" />
             </Button>
